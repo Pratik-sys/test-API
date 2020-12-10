@@ -1,39 +1,70 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response, request
 from flask_restx import Resource, Api
 from flask_mongoengine import MongoEngine
 import datetime
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
+from functools import wraps
+
 app = Flask(__name__)
 api = Api(app)
 app.config["MONGODB_SETTINGS"] = {"db": "myapp"}
 db = MongoEngine(app)
+app.config['JWT_SECRET_KEY'] = 'AQWE1123UY'  
+jwt = JWTManager(app)
 
 class Details(db.Document):
-    pan = db.StringField(required=True)
-    name = db.StringField(required=True)
-    dob = db.StringField(required=True)
-    father_name = db.StringField(required=True)
+    pan = db.StringField()
+    name = db.StringField()
+    dob = db.DateField()
+    father_name = db.StringField()
+    client_id = db.StringField()
 
-# add = Details( pan = "ANRPM2537J", name = "Dinesh Kumar", dob ="1990-10-25", father_name="Hari Kumar"
-# )
-# add.save()
+    def to_json(self):
+        return{
+            "pan": self.pan,
+            "name": self.name,
+            "dob": self.dob,
+            "father_name": self.father_name,
+            "client_id": self.client_id
+            }
+# data = Details( 
+#     pan = "ANRPM2537J", 
+#     name = "Dinesh Kumar", 
+#     dob ="1990-10-25", 
+#     father_name="Hari Kumar",
+#     client_id="4feb601e-2316-4dda-8d91-28c89cdb2335"
+#     )
+# data.save()
 # print("done")
-
 @api.route("/<string:pan_number>")
-class Test(Resource):
+class GetData(Resource):
+    @jwt_required
     def get(self, pan_number):
-         collect = Details.objects()
-         for c in collect:
-            if pan_number == c.pan :
-                return jsonify(
-                    {
-                        "pan": c.pan,
-                        "name": c.name,
-                        "dob": c.dob,
-                        "father_name": c.father_name,
-                        "client_id": "4feb601e-2316-4dda-8d91-28c89cdb2335",
-                    }
-                )
-            else:
-                return jsonify({'message': 'error occured'})
+        retrive = Details.objects()
+        for i in retrive:
+            if pan_number != i.pan:
+                return jsonify({"msg": "error"})
+        return jsonify({
+            "pan": i.pan,
+            "name": i.name,
+            "dob": i.dob,
+            "father_name": i.father_name,
+            "client_id": i.client_id
+        })
+
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
+
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
+
