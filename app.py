@@ -2,11 +2,7 @@ from flask import Flask, jsonify, make_response, request
 from flask_restx import Resource, Api
 from flask_mongoengine import MongoEngine
 import datetime
-from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
-    get_jwt_identity
-)
-from functools import wraps
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
 
 app = Flask(__name__)
 api = Api(app)
@@ -39,6 +35,16 @@ class Details(db.Document):
 #     )
 # data.save()
 # print("done")
+
+# First endpoint to generate the token 
+@app.route('/login', methods=['POST','GET'])
+def login():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
+
+# Second endpoint to fetch the Pan details with token verification 
 @api.route("/<string:pan_number>")
 class GetData(Resource):
     @jwt_required
@@ -54,15 +60,6 @@ class GetData(Resource):
             "father_name": i.father_name,
             "client_id": i.client_id
         })
-
-
-@app.route('/login', methods=['POST','GET'])
-def login():
-    username = request.json.get('username')
-    password = request.json.get('password')
-    access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token)
-
 
 
 if __name__ == "__main__":
