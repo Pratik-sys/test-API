@@ -1,0 +1,14 @@
+aniso8601==8.1.0
+attrs==20.3.0
+click==7.1.2
+Flask==1.1.2
+Flask-RESTful==0.3.8
+flask-restx==0.2.0
+itsdangerous==1.1.0
+Jinja2==2.11.2
+jsonschema==3.2.0
+MarkupSafe==1.1.1
+pyrsistent==0.17.3
+pytz==2020.4
+six==1.15.0
+Werkzeug==1.0.1
