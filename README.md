@@ -1,6 +1,6 @@
  ## API 
 
-- API that returns the PAN data, when given the PAN number as input. The API is made using [Flask Restex](https://flask-restx.readthedocs.io/en/latest/quickstart.html)
+- API that returns the PAN data, when given the PAN number as input. The API is made using [Flask Restex](https://flask-restx.readthedocs.io/en/latest/quickstart.html) and [MongoEngine](http://docs.mongoengine.org/tutorial.html) for storing the user PAN details. The [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en/stable/basic_usage/) for managing the authentication using JWT Bearer tokens.
 
 ###  Runing the API 
 
@@ -10,30 +10,32 @@
 $ git clone https://github.com/Pratik-sys/API
 ```
 
-- Navigate to  the clone repository 
+- Navigate to  the cloned repository 
+
 ```bash
 $ cd API
 ```
+
 - Run the app 
 
 ```bash
 $ python3 app.py
 ```
 
-- with the aabove instruction the flask server will start up 
+- With the above instructions the flask server will starting runing on ```localhost:8080``` 
 
-### Fetching the PAN data 
+### Fetching the PAN details
 
-> We can see this in action using CURL
+> We can see this in action using ```CURL``` command
 
-- Generate the token for accesing the PAN data 
+- Generate the token with the usernam and password for accesing the PAN data 
 
 ```bash
 $ curl -H "Content-Type: application/json" -X POST \
   -d '{"username":"Dinesh Kumar","password":"test"}' http://localhost:8080/login
 ```
 
-#### output 
+#### Output 
 
 ```bash
   {
@@ -41,14 +43,14 @@ $ curl -H "Content-Type: application/json" -X POST \
   }
 
 ```
-- After generating token save the token in to the variable
+- After generating token, save the token into the variable
 
 
 ```bash
 $ export TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDc2OTIwMjEsIm5iZiI6MTYwNzY5MjAyMSwianRpIjoiYWQ3OTEyNDgtNWIwMi00NWQ3LWI3YTItZGE1NDk0MjZmNTY1IiwiZXhwIjoxNjA3NjkyOTIxLCJpZGVudGl0eSI6IkRpbmVzaCBLdW1hciIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.ehkwJB4lWM9_ZbIwC9chXDJ1qqgMjCx46A9fVpLAmWo"
 ```
 
-- Now the PAN data can be access with the help of generated token and the PAN nuber. 
+- Now the PAN data can be accessed with the help of token and the PAN number as input. 
 
 
 ```bash 
