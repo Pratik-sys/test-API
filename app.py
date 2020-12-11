@@ -8,7 +8,7 @@ app = Flask(__name__)
 api = Api(app)
 app.config["MONGODB_SETTINGS"] = {"db": "myapp"}
 db = MongoEngine(app)
-app.config['JWT_SECRET_KEY'] = 'AQWE1123UY'  
+app.config['JWT_SECRET_KEY'] = 'secrete-key'  
 jwt = JWTManager(app)
 
 class Details(db.Document):
@@ -39,10 +39,13 @@ class Details(db.Document):
 # First endpoint to generate the token 
 @app.route('/login', methods=['POST','GET'])
 def login():
+    items = Details.objects()
     username = request.json.get('username')
     password = request.json.get('password')
-    access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token)
+    for item in items:
+        if username == item.name:
+            access_token = create_access_token(identity=username)
+    return jsonify({"access_token":access_token},200)
 
 # Second endpoint to fetch the Pan details with token verification 
 @api.route("/<string:pan_number>")
@@ -52,14 +55,14 @@ class GetData(Resource):
         retrive = Details.objects()
         for i in retrive:
             if pan_number != i.pan:
-                return jsonify({"msg": "error"})
+                return jsonify({"msg": "Error, no such pan in the database"},403)
         return jsonify({
             "pan": i.pan,
             "name": i.name,
             "dob": i.dob,
             "father_name": i.father_name,
             "client_id": i.client_id
-        })
+        }, 201)
 
 
 if __name__ == "__main__":
