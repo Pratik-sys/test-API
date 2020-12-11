@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, make_response, request
 from flask_restx import Resource, Api
 from flask_mongoengine import MongoEngine
-import datetime
+from datetime import datetime
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
 
 app = Flask(__name__)
@@ -59,7 +59,7 @@ class GetData(Resource):
         return jsonify({
             "pan": i.pan,
             "name": i.name,
-            "dob": i.dob,
+            "dob":i.dob.strftime("%Y-%m-%d"),
             "father_name": i.father_name,
             "client_id": i.client_id
         }, 201)
