@@ -36,7 +36,6 @@ class Details(db.Document):
 # data.save()
 # print("done")
 
-# First endpoint to generate the token 
 @app.route('/login', methods=['POST','GET'])
 def login():
     items = Details.objects()
@@ -45,9 +44,10 @@ def login():
     for item in items:
         if username == item.name:
             access_token = create_access_token(identity=username)
+        else:
+            return jsonify({"msg": "Invalid  user "})
     return jsonify({"access_token":access_token},200)
 
-# Second endpoint to fetch the Pan details with token verification 
 @api.route("/<string:pan_number>")
 class GetData(Resource):
     @jwt_required
