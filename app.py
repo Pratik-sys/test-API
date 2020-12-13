@@ -56,13 +56,14 @@ class GetData(Resource):
         for i in retrive:
             if pan_number != i.pan:
                 return jsonify({"msg": "Error, no such pan in the database"},403)
-        return jsonify({
-            "pan": i.pan,
-            "name": i.name,
-            "dob":i.dob.strftime("%Y-%m-%d"),
-            "father_name": i.father_name,
-            "client_id": i.client_id
-        }, 201)
+            else:
+                return jsonify({
+                    "pan": i.pan,
+                    "name": i.name,
+                    "dob":i.dob.strftime("%Y-%m-%d"),
+                    "father_name": i.father_name,
+                    "client_id": i.client_id
+                }, 201)
 
 
 if __name__ == "__main__":
