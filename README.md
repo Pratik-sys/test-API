@@ -39,7 +39,7 @@ $ curl -H "Content-Type: application/json" -X POST \
 
 ```bash
   {
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDc2OTIwMjEsIm5iZiI6MTYwNzY5MjAyMSwianRpIjoiYWQ3OTEyNDgtNWIwMi00NWQ3LWI3YTItZGE1NDk0MjZmNTY1IiwiZXhwIjoxNjA3NjkyOTIxLCJpZGVudGl0eSI6IkRpbmVzaCBLdW1hciIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.ehkwJB4lWM9_ZbIwC9chXDJ1qqgMjCx46A9fVpLAmWo"
+    "access_token": "xyz"
   }
 
 ```
@@ -47,7 +47,7 @@ $ curl -H "Content-Type: application/json" -X POST \
 
 
 ```bash
-$ export TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDc2OTIwMjEsIm5iZiI6MTYwNzY5MjAyMSwianRpIjoiYWQ3OTEyNDgtNWIwMi00NWQ3LWI3YTItZGE1NDk0MjZmNTY1IiwiZXhwIjoxNjA3NjkyOTIxLCJpZGVudGl0eSI6IkRpbmVzaCBLdW1hciIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.ehkwJB4lWM9_ZbIwC9chXDJ1qqgMjCx46A9fVpLAmWo"
+$ export TOKEN = "Your token"
 ```
 
 - Now the PAN data can be accessed with the help of token and the PAN number as input. 
