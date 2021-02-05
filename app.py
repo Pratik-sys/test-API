@@ -18,20 +18,12 @@ class Details(db.Document):
     father_name = db.StringField()
     client_id = db.StringField()
 
-    def to_json(self):
-        return{
-            "pan": self.pan,
-            "name": self.name,
-            "dob": self.dob,
-            "father_name": self.father_name,
-            "client_id": self.client_id
-            }
 # data = Details( 
-#     pan = "ANRPM2537J", 
-#     name = "Dinesh Kumar", 
-#     dob ="1990-10-25", 
-#     father_name="Hari Kumar",
-#     client_id="4feb601e-2316-4dda-8d91-28c89cdb2335"
+#     pan = "RTGHN6ung", 
+#     name = "green", 
+#     dob ="1889-10-07", 
+#     father_name="star",
+#     client_id="77uikilo-yhybvft-juygjh-vrhtt-hthtthh"
 #     )
 # data.save()
 # print("done")
