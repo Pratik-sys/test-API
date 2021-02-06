@@ -12,14 +12,14 @@ app.config['JWT_SECRET_KEY'] = 'secrete-key'
 jwt = JWTManager(app)
 
 class Details(db.Document):
-    pan = db.StringField()
-    name = db.StringField()
+    pan = db.StringField(unquie=True, required=True)
+    name = db.StringField(unquie=True, required=True)
     dob = db.DateField()
     father_name = db.StringField()
     client_id = db.StringField()
 
 # data = Details( 
-#     pan = "RTGHN6ung", 
+#     pan = "RTUNNHMJ890", 
 #     name = "green", 
 #     dob ="1889-10-07", 
 #     father_name="star",
@@ -27,14 +27,25 @@ class Details(db.Document):
 #     )
 # data.save()
 # print("done")
+# data = Details( 
+#     pan = "YHNMKIOL0908", 
+#     name = "rock", 
+#     dob ="2000-10-07", 
+#     father_name="lee",
+#     client_id="uimik87-uhgbuyj-989bgyv-ikm90opl"
+#     )
+# data.save()
+# print("done")
 
 @app.route('/login', methods=['POST','GET'])
 def login():
-    items = Details.objects()
+    items = Details.objects.all()
     username = request.json.get('username')
+    print(username)
     password = request.json.get('password')
     for item in items:
         if username == item.name:
+            print(item.name)
             access_token = create_access_token(identity=username)
         else:
             return jsonify({"msg": "Invalid  user "})

@@ -23,3 +23,9 @@ pytz==2020.4
 six==1.15.0
 Werkzeug==1.0.1
 WTForms==2.3.3
+
+curl -H "Content-Type: application/json" -X POST \
+  -d '{"username":"green","password":"test"}' http://localhost:8080/login
+
+curl -H "Content-Type: application/json" -X POST \
+  -d '{"username":"rock","password":"test"}' http://localhost:8080/login
