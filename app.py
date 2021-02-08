@@ -1,15 +1,29 @@
 from flask import Flask, jsonify, make_response, request
 from flask_restx import Resource, Api
+from flask_sqlalchemy import SQLAlchemy
 from flask_mongoengine import MongoEngine
 from datetime import datetime
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
 
 app = Flask(__name__)
 api = Api(app)
+app.config['SECRET_KEY'] = 'ce93c0d66f7ea57ff4c6'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Todo.db' # set the congif where you want to save the db 
 app.config["MONGODB_SETTINGS"] = {"db": "myapp"}
 db = MongoEngine(app)
 app.config['JWT_SECRET_KEY'] = 'secrete-key'  
 jwt = JWTManager(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pan = db.Column(db.String(200), nullable=False, unique=True)
+    name = db.Column(db.String(200), nullable=False, unique=True)
+    father_name = db.Column(db.String(60), nullable=False)
+    client_id = db.Column(db.String(60), nullable=False)
+
+
+    def __repr__(self):
+        return f'{self.pan}, {self.name},{self.father_name},{self.client_id}'
 
 class Details(db.Document):
     pan = db.StringField(unquie=True, required=True)
