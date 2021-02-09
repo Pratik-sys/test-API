@@ -1,6 +1,6 @@
  ## API 
 
-- API that returns the PAN data, when given the PAN number as input. The API is made using [Flask Restex](https://flask-restx.readthedocs.io/en/latest/quickstart.html) and [MongoEngine](http://docs.mongoengine.org/tutorial.html) for storing the user PAN details. The [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en/stable/basic_usage/) for managing the authentication using JWT Bearer tokens.
+- API that returns the PAN data, when given the PAN number as input. The API is made using [Flask Restex](https://flask-restx.readthedocs.io/en/latest/quickstart.html) and [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#quickstart) for storing the user PAN details. The [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en/stable/basic_usage/) for managing the authentication using JWT Bearer tokens.
 
 ###  Runing the API 
 
