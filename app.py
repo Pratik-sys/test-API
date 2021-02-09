@@ -68,19 +68,17 @@ def login():
 class GetData(Resource):
     @jwt_required
     def get(self, pan_number):
-        retrive = Details.objects()
-        for i in retrive:
-            if pan_number != i.pan:
-                return jsonify({"msg": "Error, no such pan in the database"},403)
-            else:
-                return jsonify({
-                    "pan": i.pan,
-                    "name": i.name,
-                    "dob":i.dob.strftime("%Y-%m-%d"),
-                    "father_name": i.father_name,
-                    "client_id": i.client_id
+        details = Pan.query.filter_by(pan=pan_number).first()
+        try:
+            if details.pan == pan_number:
+                return  jsonify({
+                "pan": details.pan,
+                "name": details.name,
+                "father_name": details.father_name,
+                "client_id": details.client_id
                 }, 201)
-
+        except:
+            return jsonify({"msg":"error"})
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
