@@ -32,6 +32,17 @@ class User(db.Model):
     def __repr__(self):
         return f'{self.id}, {self.username}'
 
+@app.route('/add', methods=['POST','GET'])
+def add():
+    pan = request.json.get('pan')
+    name = request.json.get('name')
+    father_name = request.json.get('father_name')
+    client_id = request.json.get('client_id')
+    details = Pan(pan=pan, name=name , father_name=father_name, client_id=client_id)
+    db.session.add(details)
+    db.session.commit()
+    return jsonify({"msg": "details added"})
+
 @app.route('/signup', methods=['POST','GET'])
 def signup():
     username = request.json.get('username')
@@ -73,4 +84,5 @@ class GetData(Resource):
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
+
 
