@@ -3,7 +3,7 @@ from flask_restx import Resource, Api
 from flask_mongoengine import MongoEngine
 from datetime import datetime
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
-import os, random, string
+import os, random, string, json
 from dotenv import load_dotenv
 from models import Details
 
@@ -21,25 +21,44 @@ jwt = JWTManager(app)
 @api.route("/login")
 class LoginUser(Resource):
     def post():
+        record = json.loads(request.data)
         try:
-            pass
-        except:
-            pass
-
+            user = Details.objects(Email=record["email"]).first()
+            if user.email and user.PanNumber == record["pan"]:
+                gen_token = create_access_token(identity=user.email)
+            return jsonify({"msg": gen_token},200)
+        except Exception as ex:
+            print(ex)
+            return jsonify({"msg": "No such user found"},500)
 @api.route("/dummydata")
 class DummyData(Resource):
     def post():
-        try: 
-            pass
-        except: 
-            pass
-@api.route("/<string:pan_number>")
+        record = json.loads(request.data)
+        try:
+            details = Details(
+                Name = record["name"],
+                Email = record["email"],
+                PanNumber = record["panNumber"],
+                Dob = datetime.now(),
+                FatherName = record["fatherName"]
+            )
+            details.save()
+            return jsonify({"msg" : "Dummy Data entered!"}, 201)
+        except Exception as ex:
+            print(ex)
+            return jsonify({"msg" : "error while entering data"}, 404)
+@api.route("/<string:pan_number>/details")
 class GetData(Resource):
     @jwt_required
-    def get(self, pan_number):
+    def get(self, pan_number:str):
         try:
-            pass
-        except:
+            details = Details.objects(PanNumber = pan_number).first()
+            if details:
+                return jsonify({"msg": details},201)
+            return jsonify({"msg" : "Invalid Pan Number"},500)
+        except Exception as ex:
+            print(ex)
+            return jsonify({"msg" : "Something went wrong"}, 404)
             pass
 
 
