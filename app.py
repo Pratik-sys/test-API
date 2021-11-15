@@ -11,23 +11,6 @@ db = MongoEngine(app)
 app.config['JWT_SECRET_KEY'] = 'secrete-key'  
 jwt = JWTManager(app)
 
-class Details(db.Document):
-    pan = db.StringField()
-    name = db.StringField()
-    dob = db.DateField()
-    father_name = db.StringField()
-    client_id = db.StringField()
-
-# data = Details( 
-#     pan = "RTGHN6ung", 
-#     name = "green", 
-#     dob ="1889-10-07", 
-#     father_name="star",
-#     client_id="77uikilo-yhybvft-juygjh-vrhtt-hthtthh"
-#     )
-# data.save()
-# print("done")
-
 @app.route('/login', methods=['POST','GET'])
 def login():
     items = Details.objects()
@@ -44,7 +27,7 @@ def login():
 class GetData(Resource):
     @jwt_required
     def get(self, pan_number):
-        retrive = Details.objects()
+        # retrive = Details.objects()
         for i in retrive:
             if pan_number != i.pan:
                 return jsonify({"msg": "Error, no such pan in the database"},403)
