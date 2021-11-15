@@ -1,38 +1,44 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify,request
 from flask_restx import Resource, Api
 from flask_mongoengine import MongoEngine
 from datetime import datetime
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 import os, random, string, json
 from dotenv import load_dotenv
-from models import Details
 
 
 app = Flask(__name__)
 api = Api(app)
 load_dotenv(".env")
-app.config["MONGODB_SETTINGS"] = {"host" : os.getenv("URI")}
+app.config["MONGODB_SETTINGS"] = {"host" : os.getenv("DB_URL")}
 db = MongoEngine(app)
 app.config['JWT_SECRET_KEY'] = "".join(
         random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits)
         for _ in range(16))
 jwt = JWTManager(app)
 
+class Details(db.Document):
+    Name = db.StringField()
+    Email = db.StringField()
+    PanNumber = db.StringField()
+    Dob = db.DateField()
+    FatherName = db.StringField()
+
 @api.route("/login")
 class LoginUser(Resource):
-    def post():
+    def post(self):
         record = json.loads(request.data)
         try:
             user = Details.objects(Email=record["email"]).first()
-            if user.email and user.PanNumber == record["pan"]:
-                gen_token = create_access_token(identity=user.email)
+            if user.Email and user.PanNumber == record["panNumber"]:
+                gen_token = create_access_token(identity=user.Email)
             return jsonify({"msg": gen_token},200)
         except Exception as ex:
             print(ex)
             return jsonify({"msg": "No such user found"},500)
 @api.route("/dummydata")
 class DummyData(Resource):
-    def post():
+    def post(self):
         record = json.loads(request.data)
         try:
             details = Details(
@@ -49,7 +55,7 @@ class DummyData(Resource):
             return jsonify({"msg" : "error while entering data"}, 404)
 @api.route("/<string:pan_number>/details")
 class GetData(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self, pan_number:str):
         try:
             details = Details.objects(PanNumber = pan_number).first()
@@ -59,9 +65,7 @@ class GetData(Resource):
         except Exception as ex:
             print(ex)
             return jsonify({"msg" : "Something went wrong"}, 404)
-            pass
-
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=True)
 
